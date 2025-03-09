@@ -34,7 +34,7 @@ const RouteMap: React.FC<RouteMapProps> = ({
   dropoffLocation,
 }) => {
   const [route, setRoute] = useState<L.LatLng[]>([]);
-  const GRAPH_HOPPER_API_KEY = "40df3919-cb8f-4849-8828-7cadb3b3d05a";
+  // const GRAPH_HOPPER_API_KEY = "40df3919-cb8f-4849-8828-7cadb3b3d05a";
 
   useEffect(() => {
     if (currentLocation && pickupLocation && dropoffLocation) {

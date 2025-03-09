@@ -11,6 +11,12 @@ const TripDetailPage: React.FC = () => {
   const { id } = useParams();
   const { data } = useGetTripsById(Number(id));
   const formattedLogs = formatLogs(data?.logs || []);
+  const filteredLogs = data?.logs?.filter(
+    (log) =>
+      log.remarks !== "Pickup location - Loading cargo" &&
+      log.remarks !== "Drop-off location - Unloading cargo" &&
+      log.remarks !== "Finished"
+  );
   return (
     <MainLayout>
       <motion.div

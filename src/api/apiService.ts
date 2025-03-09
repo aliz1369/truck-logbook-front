@@ -11,8 +11,15 @@ export const getDrivers = async () => {
   return response.data;
 };
 
-export const getDriverRemainHour = async (id: number) => {
-  const response = await apiClient.get(`/drivers/${id}/hours/`);
+export const getDriverRemainHour = async (id: number, date?: string | Date) => {
+  if (!date) throw new Error("Date is required");
+
+  const referenceDate =
+    typeof date === "string" ? date : date.toISOString().split("T")[0];
+
+  const response = await apiClient.get(
+    `/drivers/${id}/hours?reference_date=${referenceDate}`
+  );
   return response.data;
 };
 

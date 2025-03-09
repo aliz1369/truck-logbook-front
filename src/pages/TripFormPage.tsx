@@ -22,21 +22,26 @@ const TripFormPage: React.FC = () => {
   const [isDriverModalOpen, setIsDriverModalOpen] = useState(false);
   const [isVehicleModalOpen, setIsVehicleModalOpen] = useState(false);
   const [responseMessage, setResponseMessage] = useState<string | null>(null);
-  const [driver_id, setDriver_id] = useState(0);
+
   const { mutate, isPending } = useAddTrip();
   const { data: drivers } = useGetDrivers();
   const { data: vehicles } = useGetVehicles();
+
   const [formData, setFormData] = useState({
     driver_id: 0,
     vehicle_id: 0,
+    selected_date: new Date().toISOString().split("T")[0],
   });
-  const { data: remainingHours, refetch } = useGetRemainHours(driver_id);
+  const { data: remainingHours, refetch } = useGetRemainHours(
+    formData.driver_id,
+    formData.selected_date ? new Date(formData.selected_date) : undefined
+  );
 
   useEffect(() => {
-    if (driver_id) {
+    if (formData.driver_id && formData.selected_date) {
       refetch();
     }
-  }, [driver_id, refetch]);
+  }, [formData.driver_id, formData.selected_date, refetch]);
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,6 +54,7 @@ const TripFormPage: React.FC = () => {
     const requestData: PostTrip = {
       driver_id: formData.driver_id,
       vehicle_id: formData.vehicle_id,
+      date: formData.selected_date,
       current_location: {
         lat: currentLocation.lat,
         lng: currentLocation.lng,
@@ -82,10 +88,31 @@ const TripFormPage: React.FC = () => {
         <form onSubmit={handleFormSubmit} className="space-y-4">
           <RemainingHours
             availableHours={
-              driver_id !== 0 ? remainingHours?.available_hours ?? 0 : 0
+              formData.driver_id !== 0 && formData.selected_date
+                ? remainingHours?.available_hours ?? 0
+                : 0
             }
           />
           <div>
+            <label
+              className="block text-gray-700 font-medium mb-1"
+              htmlFor="selected_date"
+            >
+              Select Date:
+            </label>
+            <input
+              type="date"
+              id="selected_date"
+              value={formData.selected_date}
+              required
+              className="border p-2 rounded w-full"
+              onChange={(e) => {
+                setFormData((prev) => ({
+                  ...prev,
+                  selected_date: e.target.value,
+                }));
+              }}
+            />
             <label
               className="block text-gray-700 font-medium mb-1"
               htmlFor="driver_name"
@@ -96,7 +123,6 @@ const TripFormPage: React.FC = () => {
               id="driver_id"
               value={formData.driver_id}
               onChange={(e) => {
-                setDriver_id(Number(e.target.value));
                 setFormData({ ...formData, driver_id: Number(e.target.value) });
               }}
               className="border p-2 rounded w-full"
