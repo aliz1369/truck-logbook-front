@@ -62,11 +62,8 @@ const TripFormPage: React.FC = () => {
         lng: dropoffLocation.lng,
       },
     };
-    console.log(requestData);
     mutate(requestData, {
-      onSuccess: (response) => {
-        console.log(response);
-      },
+      onSuccess: () => {},
       onError: (error) => {
         console.error("Form submission error:", error);
       },
