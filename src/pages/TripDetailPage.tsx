@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import L from "leaflet";
 import React from "react";
 import { useParams } from "react-router-dom";
 import DailyLog from "../components/DailyLog";
@@ -11,12 +12,17 @@ const TripDetailPage: React.FC = () => {
   const { id } = useParams();
   const { data } = useGetTripsById(Number(id));
   const formattedLogs = formatLogs(data?.logs || []);
-  const filteredLogs = data?.logs?.filter(
-    (log) =>
-      log.remarks !== "Pickup location - Loading cargo" &&
-      log.remarks !== "Drop-off location - Unloading cargo" &&
-      log.remarks !== "Finished"
-  );
+  const filteredLogs: L.LatLng[] =
+    data?.logs
+      ?.filter(
+        (log) =>
+          log.remarks !== "Pickup location - Loading cargo" &&
+          log.remarks !== "Drop-off location - Unloading cargo" &&
+          log.remarks !== "Finished" &&
+          log.stop_location !== null
+      )
+      .map((log) => L.latLng(log.stop_location!.lat, log.stop_location!.lng)) ||
+    [];
   return (
     <MainLayout>
       <motion.div
@@ -35,6 +41,7 @@ const TripDetailPage: React.FC = () => {
             currentLocation={data?.current_location as L.LatLng}
             pickupLocation={data?.pickup_location as L.LatLng}
             dropoffLocation={data?.dropoff_location as L.LatLng}
+            stopsLocation={filteredLogs}
           />
         </div>
         <div className="mt-6">

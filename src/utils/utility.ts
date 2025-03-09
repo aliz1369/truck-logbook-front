@@ -31,7 +31,7 @@ export const formatLogs = (logs: LogEntry[]): LogEntry[] => {
 
       if (roundedMinutes === 60) {
         if (hours === 23) {
-          return "23:40";
+          return "23:45";
         }
         date.setHours(hours + 1);
         roundedMinutes = 0;

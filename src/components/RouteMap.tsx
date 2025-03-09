@@ -26,14 +26,17 @@ interface RouteMapProps {
   currentLocation: L.LatLng | null;
   pickupLocation: L.LatLng | null;
   dropoffLocation: L.LatLng | null;
+  stopsLocation?: L.LatLng[] | null;
 }
 
 const RouteMap: React.FC<RouteMapProps> = ({
   currentLocation,
   pickupLocation,
   dropoffLocation,
+  stopsLocation,
 }) => {
   const [route, setRoute] = useState<L.LatLng[]>([]);
+  const GRAPH_HOPPER_API_KEY = import.meta.env.VITE_GRAPH_HOPPER_API_KEY;
 
   useEffect(() => {
     if (currentLocation && pickupLocation && dropoffLocation) {
@@ -75,6 +78,10 @@ const RouteMap: React.FC<RouteMapProps> = ({
         {dropoffLocation && (
           <Marker position={dropoffLocation} icon={customIcons.dropoff} />
         )}
+        {stopsLocation &&
+          stopsLocation.map((stop, index) => (
+            <Marker position={stop} icon={customIcons.stop} key={index} />
+          ))}
 
         {route.length > 0 && <Polyline positions={route} color="blue" />}
       </MapContainer>

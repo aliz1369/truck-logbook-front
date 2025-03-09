@@ -44,14 +44,13 @@ const DailyLog: React.FC<DailyLogProps> = ({ logData, trip }) => {
   const [selectedDayIndex, setSelectedDayIndex] = useState(0);
   const selectedDay = days[selectedDayIndex];
   const selectedDayLogs = logsByDay[selectedDay] || [];
-
-  const labels = Array.from({ length: 96 }, (_, i) =>
+  const labels = Array.from({ length: 97 }, (_, i) =>
     moment(selectedDay)
       .startOf("day")
       .add(i * 15, "minutes")
-      .format("HH:mm")
+      .format(i === 96 ? "24:00" : "HH:mm")
   );
-
+  
   const logPoints = selectedDayLogs.flatMap((entry, index) => {
     const startTime = moment(entry.start_time, "HH:mm:ss.SSSSSS").format(
       "HH:mm"
