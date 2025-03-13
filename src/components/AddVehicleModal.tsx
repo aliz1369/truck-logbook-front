@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import React, { useState } from "react";
+import { toast } from "sonner";
 import useAddVehicle from "../hooks/useAddVehicle";
 import { Vehicle } from "../types/globalTypes";
 
@@ -26,11 +27,11 @@ const AddVehicleModal: React.FC<AddVehicleModalProps> = ({ onClose }) => {
     e.preventDefault();
     mutate(formData, {
       onSuccess: () => {
-        alert("Vehicle added successfully!");
+        toast.success("Vehicle added successfully!");
         onClose();
       },
       onError: () => {
-        alert("Error adding vehicle. Please try again.");
+        toast.error("Error adding vehicle. Please try again.");
       },
     });
   };

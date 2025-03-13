@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import useAddDriver from "../hooks/useAddDriver";
 import { DriverType } from "../types/globalTypes";
 import { motion } from "framer-motion";
+import { toast } from "sonner";
 
 interface AddDriverModalProps {
   onClose: () => void;
@@ -24,11 +25,11 @@ const AddDriverModal: React.FC<AddDriverModalProps> = ({ onClose }) => {
     e.preventDefault();
     mutate(formData, {
       onSuccess: () => {
-        alert("Driver added successfully!");
+        toast.success("New driver added.")
         onClose();
       },
       onError: () => {
-        alert("Error adding driver. Please try again.");
+        toast.error("Error adding driver. Please try again.");
       },
     });
   };

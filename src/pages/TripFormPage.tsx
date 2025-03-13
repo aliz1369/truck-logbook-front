@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
+import { Toaster, toast } from "sonner";
 import AddDriverModal from "../components/AddDriverModal";
 import AddVehicleModal from "../components/AddVehicleModal";
 import MapModal from "../components/MapModal";
@@ -11,7 +12,6 @@ import useGetRemainHours from "../hooks/useGetRemainHours";
 import useGetVehicles from "../hooks/useGetVehicles";
 import MainLayout from "../layouts/MainLayout";
 import { PostTrip } from "../types/globalTypes";
-
 const TripFormPage: React.FC = () => {
   const [currentLocation, setCurrentLocation] = useState<L.LatLng | null>(null);
   const [pickupLocation, setPickupLocation] = useState<L.LatLng | null>(null);
@@ -69,12 +69,10 @@ const TripFormPage: React.FC = () => {
       },
     };
     mutate(requestData, {
-      onSuccess: () => {},
-      onError: (error) => {
-        console.error("Form submission error:", error);
+      onSuccess: () => {
+        toast.success("Sections saved successfully! ✅");
       },
     });
-    alert("Trip details submitted successfully!");
   };
   return (
     <MainLayout>
@@ -254,6 +252,7 @@ const TripFormPage: React.FC = () => {
         </div>
       </motion.div>
 
+      <Toaster position="bottom-right" richColors={true} />
       {isSelecting && (
         <MapModal
           setLocation={
