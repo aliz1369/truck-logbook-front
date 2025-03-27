@@ -50,7 +50,7 @@ const RouteMap: React.FC<RouteMapProps> = ({
     dropoff: L.LatLng
   ) => {
     try {
-      const url = `https://graphhopper.com/api/1/route?point=${current.lat},${current.lng}&point=${pickup.lat},${pickup.lng}&point=${dropoff.lat},${dropoff.lng}&profile=truck&instructions=true&locale=en&calc_points=true&key=${GRAPH_HOPPER_API_KEY}&points_encoded=false`;
+      const url = `https://graphhopper.com/api/1/route?point=${current.lat},${current.lng}&point=${pickup.lat},${pickup.lng}&point=${dropoff.lat},${dropoff.lng}&profile=car&instructions=true&locale=en&calc_points=true&key=${GRAPH_HOPPER_API_KEY}&points_encoded=false`;
       const response = await axios.get(url);
       const routeCoords = response.data.paths[0].points.coordinates.map(
         ([lng, lat]: [number, number]) => new L.LatLng(lat, lng)
